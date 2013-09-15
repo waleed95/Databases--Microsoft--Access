@@ -1,0 +1,763 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
+
+public class Culminating
+{
+
+    /**
+     * @param args
+     */
+    public static void main (String[] args)
+    {
+	// TODO Auto-generated method stub
+	SwingUtilities.invokeLater (new Runnable ()
+	{
+	    public void run ()
+	    {
+		////////////ESTABLISING FRAME AND PANEL/////////////////////////
+		final JFrame mainframe = new JFrame ("Pewee Database");
+
+		mainframe.setSize (1500, 740);
+		mainframe.setVisible (true);
+		mainframe.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
+
+		final GridBagConstraints c = new GridBagConstraints ();
+
+
+		final JPanel menupanel = new JPanel (new GridBagLayout ());
+		menupanel.setSize (1500, 740);
+		menupanel.setBackground (Color.BLACK);
+		mainframe.add (menupanel);
+		////////////ESTABLISING FRAME AND PANEL/////////////////////////
+		
+		////////////ESTABLISING TABLE//////////////////////////////////////
+		final DefaultTableModel model = new DefaultTableModel (1, 11);
+		final JTable data = new JTable (model);
+		final TableRowSorter < TableModel > sorter = new TableRowSorter < TableModel > (model);
+		data.setRowSorter (sorter);
+		data.setPreferredScrollableViewportSize (new Dimension (1200, 300));
+		data.getColumnModel ().getColumn (0).setHeaderValue ("Player");
+		data.getColumnModel ().getColumn (1).setHeaderValue ("Goals");
+		data.getColumnModel ().getColumn (2).setHeaderValue ("Assists");
+		data.getColumnModel ().getColumn (3).setHeaderValue ("Points");
+		data.getColumnModel ().getColumn (4).setHeaderValue ("PIM");
+		data.getColumnModel ().getColumn (5).setHeaderValue ("Team");
+		data.getColumnModel ().getColumn (6).setHeaderValue ("Position");
+		data.getColumnModel ().getColumn (7).setHeaderValue ("Skating");
+		data.getColumnModel ().getColumn (8).setHeaderValue ("Passing");
+		data.getColumnModel ().getColumn (9).setHeaderValue ("Shooting");
+		data.getColumnModel ().getColumn (10).setHeaderValue ("Overall");
+		data.setFillsViewportHeight (true);
+
+		final JScrollPane dts = new JScrollPane (data);
+		menupanel.add (dts);
+		////////////ESTABLISING TABLE//////////////////////////////////////
+		
+	       
+		////////////ENTERING PWEE DATA IN TABLE//////////////////////////////////////
+		try
+		{
+		    Class.forName ("sun.jdbc.odbc.JdbcOdbcDriver");
+		    Connection con = DriverManager.getConnection ("jdbc:odbc:pwee");
+		    Statement st = con.createStatement ();
+		    ResultSet rs = st.executeQuery ("select * from stats");
+
+		    while (rs.next ())
+		    {
+			String[] infos = new String [11];
+			infos [0] = rs.getString (1);
+			infos [1] = rs.getString (2);
+			infos [2] = rs.getString (3);
+			infos [3] = rs.getString (4);
+			infos [4] = rs.getString (5);
+			infos [5] = rs.getString (6);
+			infos [6] = rs.getString (7);
+			infos [7] = rs.getString (8);
+			infos [8] = rs.getString (9);
+			infos [9] = rs.getString (10);
+			infos [10] = rs.getString (11);
+			model.addRow (infos);
+
+		    }
+
+		}
+		catch (ClassNotFoundException e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace ();
+		}
+		catch (SQLException e)
+		{
+		    // TODO Auto-generated catch block
+		    e.printStackTrace ();
+		}
+		////////////ENTERING PWEE DATA IN TABLE//////////////////////////////////////
+		
+		////////////COMBOBOX ARRAY VARIABLES//////////////////////////////////////
+		int count = 0;
+		Object[] playersdata = new String [model.getRowCount ()];
+		while (count < model.getRowCount ())
+		{
+		    playersdata [count] = model.getValueAt (count, 0);
+		    count++;
+		}
+		int count1 = 0;
+		Object[] goalsdata = new Object [100];
+		while (count1 < 100)
+		{
+		    goalsdata [count1] = count1;
+		    count1++;
+		}
+
+		String[] listinfo = {"Select...", "Player", "Goals", "Assists", "Points", "PIM", "Team", "Position", "Skating", "Passing", "Shooting", "Overall"};
+		String[] stringactioninfo = {"Select...", "=", "<>"};
+		String[] stringactioninfo1 = {"Select...", "<", ">", "=", "<=", ">=", "<>"};
+		String[] ar = {"Select...", "and", "or"};
+		String[] teaminfo = {"Select...","The Wave", "Sutton", "Refs","MM","LD Elec","Lang","Jake's","Ho Lee","Gravelle","Eaton","D&V","Catalina","BC Phillips","Argo"};
+		String[] postioninfo = {"Select...","C","C/W","D","D/C","D/F","D/W","F","G","LW","N/A","RW","W","W/D"};
+		String[] skatiinginfo ={"Select...","A+","A","A-","B+","B","B-","C+","C","C-","D+","D","D-","N/A"};
+		
+
+		final String[] andtitle = new String [999];
+		final String[] andtitlec = new String [999];
+		final String[] andequal = new String [999];
+
+		int count2 = 0;
+		while (count2 < 999)
+		{
+		    andtitlec [count2] = "abc";
+		    count2++;
+		}
+		////////////COMBOBOX ARRAY VARIABLES//////////////////////////////////////
+		
+		////////////COMBOBOX VARIABLES//////////////////////////////////////
+		final JComboBox mainlist = new JComboBox (listinfo);
+		final JComboBox playerslist = new JComboBox (playersdata);
+		final JComboBox goalslist = new JComboBox (goalsdata);
+		final JComboBox seclist = new JComboBox (stringactioninfo);
+		final JComboBox seclist1 = new JComboBox (stringactioninfo1);
+		final JComboBox arlist = new JComboBox (ar);
+		final JComboBox teamlist = new JComboBox (teaminfo);
+		final JComboBox postionlist =new JComboBox (postioninfo);
+		final JComboBox skatinglist = new JComboBox (skatiinginfo);
+		////////////COMBOBOX VARIABLES//////////////////////////////////////
+    
+		////////////LABEL VARIABLES AND OTHERS//////////////////////////////////////
+		final JButton startquery = new JButton ("Execute Query");
+		final JLabel titlelabel = new JLabel ("");
+		final JLabel titleclabel = new JLabel ("");
+		final JLabel equallabel = new JLabel ("");
+		final JLabel andoridentifier = new JLabel ("jim");
+		final JLabel querylabel = new JLabel ("select * from stats where");
+		final JLabel arlabel = new JLabel ("");
+		querylabel.setOpaque (true);
+		querylabel.setForeground (Color.WHITE);
+		querylabel.setBackground (Color.RED);
+		////////////LABEL VARIABLES AND OTHERS//////////////////////////////////////
+		
+		////////////PLOTTING COMPONENTS ON PANEL//////////////////////////////////////
+		c.insets = new Insets (1, 5, 5, 0);
+		c.gridx = 0;
+		c.gridy = 0;
+		menupanel.add (startquery, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		menupanel.add (querylabel, c);
+		c.gridwidth = 10;
+		c.gridx = 0;
+		c.gridy = 1;
+		menupanel.add (dts, c);
+		c.anchor = GridBagConstraints.LAST_LINE_START;
+		c.gridx = 0;
+		c.gridy = 2;
+		menupanel.add (mainlist, c);
+		c.gridx = 1;
+		c.gridy = 2;
+		menupanel.add (seclist, c);
+		c.gridx = 1;
+		c.gridy = 2;
+		menupanel.add (seclist1, c);
+		seclist1.setVisible (false);
+		c.anchor = GridBagConstraints.BASELINE;
+		c.gridx = 2;
+		c.gridy = 2;
+		menupanel.add (playerslist, c);
+		c.gridx = 2;
+		c.gridy = 2;
+		menupanel.add (goalslist, c);
+		c.gridx = 2;
+		c.gridy = 2;
+		menupanel.add (teamlist, c);
+		c.gridx = 2;
+		c.gridy = 2;
+		menupanel.add (skatinglist, c);
+		c.gridx = 2;
+		c.gridy = 2;
+		menupanel.add (postionlist, c);
+		c.anchor = GridBagConstraints.LAST_LINE_END;
+		c.gridx = 3;
+		c.gridy = 2;
+		menupanel.add (arlist, c);
+		goalslist.setVisible (false);
+		playerslist.setVisible (false);
+		postionlist.setVisible(false);
+		teamlist.setVisible(false);
+		skatinglist.setVisible(false);
+		////////////PLOTTING COMPONENTS ON PANEL//////////////////////////////////////
+		
+		////////////MAINLIST ACTIONLISTENER START//////////////////////////////////////
+		mainlist.addItemListener (
+			new ItemListener ()
+		{
+		    public void itemStateChanged (ItemEvent event)
+		    {
+
+			if (event.getStateChange () == ItemEvent.SELECTED)
+			{
+				////////////PLAYER SELECT FUNCTION//////////////////////////////////////
+			    if (mainlist.getSelectedIndex () == 1)
+			    {   arlist.setSelectedIndex(0);
+				playerslist.setVisible (true);
+				seclist.setVisible (true);
+				seclist1.setVisible (false);
+				postionlist.setVisible(false);
+				teamlist.setVisible(false);
+				skatinglist.setVisible(false);
+				goalslist.setVisible (false);
+				equallabel.setText (seclist.getSelectedItem ().toString ());
+				titlelabel.setText (mainlist.getSelectedItem ().toString ());
+				playerslist.addItemListener (
+					new ItemListener ()
+				{
+				    public void itemStateChanged (ItemEvent event)
+				    {
+					if (event.getStateChange () == ItemEvent.SELECTED)
+					{
+					    titleclabel.setText ("'"+playerslist.getSelectedItem ().toString ()+"'");
+					}
+				    }
+				}
+
+				);
+			    }
+
+			}
+			
+			////////////GOALS SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 2)
+			{
+				arlist.setSelectedIndex(0);
+			    playerslist.setVisible (false);
+			    goalslist.setVisible (true);
+			    seclist.setVisible (false);
+			    seclist1.setVisible (true);
+			    postionlist.setVisible(false);
+			    teamlist.setVisible(false);
+			    skatinglist.setVisible(false);
+
+			    equallabel.setText (seclist1.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			    goalslist.addItemListener (
+				    new ItemListener ()
+			    {
+				public void itemStateChanged (ItemEvent event)
+				{
+				    if (event.getStateChange () == ItemEvent.SELECTED)
+				    {
+					titleclabel.setText (goalslist.getSelectedItem ().toString ());
+				    }
+				}
+			    }
+
+			    );
+			}
+			
+			////////////ASSISTS SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 3)
+			{
+				arlist.setSelectedIndex(0);
+			    playerslist.setVisible (false);
+			    goalslist.setVisible (true);
+			    seclist.setVisible (false);
+			    seclist1.setVisible (true);
+			    postionlist.setVisible(false);
+			    teamlist.setVisible(false);
+			    skatinglist.setVisible(false);
+			    
+			    equallabel.setText (seclist1.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			    goalslist.addItemListener (
+				    new ItemListener ()
+			    {
+				public void itemStateChanged (ItemEvent event)
+				{
+				    if (event.getStateChange () == ItemEvent.SELECTED)
+				    {
+					titleclabel.setText (goalslist.getSelectedItem ().toString ());
+				    }
+				}
+			    }
+
+			    );
+
+			}
+		    
+			////////////POINTS SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 4)
+			{
+				 arlist.setSelectedIndex(0);
+				 playerslist.setVisible (false);
+			     goalslist.setVisible (true);
+			     seclist.setVisible (false);
+			     seclist1.setVisible (true);
+			     postionlist.setVisible(false);
+			     teamlist.setVisible(false);
+			     skatinglist.setVisible(false);
+
+			     equallabel.setText (seclist1.getSelectedItem ().toString ());
+			     titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			     goalslist.addItemListener (
+				     new ItemListener ()
+			     {
+				 public void itemStateChanged (ItemEvent event)
+				 {
+				     if (event.getStateChange () == ItemEvent.SELECTED)
+				     {
+					 titleclabel.setText (goalslist.getSelectedItem ().toString ());
+				     }
+				 }
+			     }
+
+			     );
+
+			}
+			////////////PIM SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 5)
+			{
+				 arlist.setSelectedIndex(0);
+				 playerslist.setVisible (false);
+			     goalslist.setVisible (true);
+			     seclist.setVisible (false);
+			     seclist1.setVisible (true);
+			     postionlist.setVisible(false);
+			     teamlist.setVisible(false);
+			     skatinglist.setVisible(false);
+
+			     equallabel.setText (seclist1.getSelectedItem ().toString ());
+			     titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			     goalslist.addItemListener (
+				     new ItemListener ()
+			     {
+				 public void itemStateChanged (ItemEvent event)
+				 {
+				     if (event.getStateChange () == ItemEvent.SELECTED)
+				     {
+					 titleclabel.setText (goalslist.getSelectedItem ().toString ());
+				     }
+				 }
+			     }
+
+			     );
+
+			}
+			////////////TEAM SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 6)
+			{
+				 arlist.setSelectedIndex(0);
+				 playerslist.setVisible (false);
+			     seclist.setVisible (true);
+			     seclist1.setVisible (false);
+			     postionlist.setVisible(false);
+			     teamlist.setVisible(true);
+			     skatinglist.setVisible(false);
+			     goalslist.setVisible (false);
+			     equallabel.setText (seclist.getSelectedItem ().toString ());
+			     titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			     teamlist.addItemListener (
+				     new ItemListener ()
+			     {
+				 public void itemStateChanged (ItemEvent event)
+				 {
+				     if (event.getStateChange () == ItemEvent.SELECTED)
+				     {
+					 titleclabel.setText ("'"+teamlist.getSelectedItem ().toString ()+"'");
+				     }
+				 }
+			     }
+
+			     );
+
+			}
+			////////////POSITION SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 7)
+			{
+				arlist.setSelectedIndex(0);
+				playerslist.setVisible (false);
+			    seclist.setVisible (true);
+			    seclist1.setVisible (false);
+			    postionlist.setVisible(true);
+			    teamlist.setVisible(false);
+			    skatinglist.setVisible(false);
+			    goalslist.setVisible (false);
+			    equallabel.setText (seclist.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			    postionlist.addItemListener (
+				    new ItemListener ()
+			    {
+				public void itemStateChanged (ItemEvent event)
+				{
+				    if (event.getStateChange () == ItemEvent.SELECTED)
+				    {
+					titleclabel.setText ("'"+postionlist.getSelectedItem ().toString ()+"'");
+				    }
+				}
+			    }
+
+			    );
+			}
+			////////////SKATING SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 8)
+			{
+				arlist.setSelectedIndex(0);
+				playerslist.setVisible (false);
+			    seclist.setVisible (true);
+			    seclist1.setVisible (false);
+			    postionlist.setVisible(false);
+			    teamlist.setVisible(false);
+			    skatinglist.setVisible(true);
+			    goalslist.setVisible (false);
+			    equallabel.setText (seclist.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			    skatinglist.addItemListener (
+				    new ItemListener ()
+			    {
+				public void itemStateChanged (ItemEvent event)
+				{
+				    if (event.getStateChange () == ItemEvent.SELECTED)
+				    {
+					titleclabel.setText ("'"+skatinglist.getSelectedItem ().toString ()+"'");
+				    }
+				}
+			    }
+
+			    );
+
+			}
+			////////////PASSING SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 9)
+			{
+				arlist.setSelectedIndex(0);
+				playerslist.setVisible (false);
+			    seclist.setVisible (true);
+			    seclist1.setVisible (false);
+			    postionlist.setVisible(false);
+			    teamlist.setVisible(false);
+			    skatinglist.setVisible(true);
+			    goalslist.setVisible (false);
+			    equallabel.setText (seclist.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			    skatinglist.addItemListener (
+				    new ItemListener ()
+			    {
+				public void itemStateChanged (ItemEvent event)
+				{
+				    if (event.getStateChange () == ItemEvent.SELECTED)
+				    {
+					titleclabel.setText ("'"+skatinglist.getSelectedItem ().toString ()+"'");
+				    }
+				}
+			    }
+
+			    );
+
+			}
+			////////////SHOOTING SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 10)
+			{
+				arlist.setSelectedIndex(0);
+				playerslist.setVisible (false);
+			    seclist.setVisible (true);
+			    seclist1.setVisible (false);
+			    postionlist.setVisible(false);
+			    teamlist.setVisible(false);
+			    skatinglist.setVisible(true);
+			    goalslist.setVisible (false);
+			    equallabel.setText (seclist.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			    skatinglist.addItemListener (
+				    new ItemListener ()
+			    {
+				public void itemStateChanged (ItemEvent event)
+				{
+				    if (event.getStateChange () == ItemEvent.SELECTED)
+				    {
+					titleclabel.setText ("'"+skatinglist.getSelectedItem ().toString ()+"'");
+				    }
+				}
+			    }
+
+			    );
+			}
+			////////////OVERALL SELECT FUNCTION//////////////////////////////////////
+			else if (mainlist.getSelectedIndex () == 11)
+			{       arlist.setVisible(false);
+				playerslist.setVisible (false);
+			    seclist.setVisible (true);
+			    seclist1.setVisible (false);
+			    postionlist.setVisible(false);
+			    teamlist.setVisible(false);
+			    skatinglist.setVisible(true);
+			    goalslist.setVisible (false);
+			    equallabel.setText (seclist.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			    skatinglist.addItemListener (
+				    new ItemListener ()
+			    {
+				public void itemStateChanged (ItemEvent event)
+				{
+				    if (event.getStateChange () == ItemEvent.SELECTED)
+				    {
+					titleclabel.setText ("'"+skatinglist.getSelectedItem ().toString ()+"'");
+				    }
+				}
+			    }
+
+			    );
+			}
+			else
+			{
+			    equallabel.setText (seclist.getSelectedItem ().toString ());
+			    titlelabel.setText (mainlist.getSelectedItem ().toString ());
+			}
+			////////////MAINLIST ACTIONLISTENER END//////////////////////////////////////
+			
+			////////////LIST OF SIGNS FOR STRINGS//////////////////////////////////////
+			seclist.addItemListener (
+				new ItemListener ()
+			{
+			    public void itemStateChanged (ItemEvent event)
+			    {
+				if (event.getStateChange () == ItemEvent.SELECTED)
+				{
+				    equallabel.setText (seclist.getSelectedItem ().toString ());
+				}
+			    }
+			}
+			);
+			
+			////////////LIST OF SIGNS FOR INTS//////////////////////////////////////
+			seclist1.addItemListener (
+				new ItemListener ()
+			{
+			    public void itemStateChanged (ItemEvent event)
+			    {
+				if (event.getStateChange () == ItemEvent.SELECTED)
+				{
+				    equallabel.setText (seclist1.getSelectedItem ().toString ());
+				}
+			    }
+			}
+			);
+		    }
+
+		}
+		);
+
+		////////////AND/OR SELECT FUNCTION//////////////////////////////////////
+		arlist.addItemListener (
+			new ItemListener ()
+		{
+		    int counting = 0;
+		    public void itemStateChanged (ItemEvent event)
+		    {
+			if (event.getStateChange () == ItemEvent.SELECTED)
+			{
+
+			    if (arlist.getSelectedIndex () == 1 || arlist.getSelectedIndex () == 2)
+			    {
+				andoridentifier.setText ("and");
+				if (titlelabel.getText ().equalsIgnoreCase (mainlist.getSelectedItem ().toString ()))
+				{
+				    andtitle [counting] = titlelabel.getText ();
+				    andtitlec [counting] = titleclabel.getText ();
+				    andequal [counting] = equallabel.getText ();
+				    titlelabel.setText ("");
+				    titleclabel.setText ("");
+				    equallabel.setText ("");
+				    counting = counting + 1;
+				}
+				else
+				{
+				    counting = 0;
+				}
+				mainlist.setSelectedIndex (0);
+				seclist.setSelectedIndex (0);
+				seclist1.setSelectedIndex (0);
+				playerslist.setSelectedIndex (0);
+				goalslist.setSelectedIndex (0);
+			       
+				goalslist.setVisible (false);
+				playerslist.setVisible (true);
+			    }
+
+
+			}
+
+		    }
+		}
+		);
+
+		////////////EXCEUTE QUERY BUTTON FUNCTION//////////////////////////////////////
+		startquery.addActionListener (new ActionListener ()
+		{
+		    int counting1 = 0;
+		    String query = "";
+		    String firstquery = "";
+		    
+		    public void actionPerformed (ActionEvent e1)
+		    {   
+			
+			    while (model.getRowCount () > 0)
+			    {
+				model.removeRow (0);
+			    }
+
+			    try
+			    {
+				Class.forName ("sun.jdbc.odbc.JdbcOdbcDriver");
+				Connection con = DriverManager.getConnection ("jdbc:odbc:pwee");
+
+				Statement st = con.createStatement ();
+				//you need to switch int/string with and/or
+
+				if (andoridentifier.getText ().equalsIgnoreCase ("and"))
+				{
+					
+				    ResultSet rs;
+				    while (!andtitlec [counting1].equalsIgnoreCase ("abc"))
+				    {
+					if (counting1 == 0)
+					{
+					    firstquery = "select * from stats where [" + andtitle [counting1] + "]" + andequal [counting1] + andtitlec [counting1];
+					}
+					else
+					{
+						if (arlist.getSelectedItem ().toString ().equalsIgnoreCase("and") || arlist.getSelectedItem ().toString ().equalsIgnoreCase("or") )
+					    query = query + " " + arlist.getSelectedItem ().toString () + " [" + andtitle [counting1] + "]" + andequal [counting1] + andtitlec [counting1];
+					}
+					counting1++;
+				    }
+
+				    
+				    System.out.println (counting1);
+				    rs = st.executeQuery (firstquery + query);
+				    querylabel.setText (firstquery + query);
+				    querylabel.updateUI ();
+				    query = "";
+				    firstquery= "";
+				    System.out.println (firstquery + query);
+				    
+				    counting1 = 0;
+				    while (rs.next ())
+				    {
+					String[] infos = new String [11];
+					infos [0] = rs.getString (1);
+					infos [1] = rs.getString (2);
+					infos [2] = rs.getString (3);
+					infos [3] = rs.getString (4);
+					infos [4] = rs.getString (5);
+					infos [5] = rs.getString (6);
+					infos [6] = rs.getString (7);
+					infos [7] = rs.getString (8);
+					infos [8] = rs.getString (9);
+					infos [9] = rs.getString (10);
+					infos [10] = rs.getString (11);
+					model.addRow (infos);
+				    }
+				    
+				}
+
+				else if (andoridentifier.getText ().equalsIgnoreCase ("jim"))
+				{
+				    ResultSet rs;
+				    rs = st.executeQuery ("select * from stats where [" + titlelabel.getText () + "]" + equallabel.getText () + titleclabel.getText ());
+				    while (rs.next ())
+				    {
+					String[] infos = new String [11];
+					infos [0] = rs.getString (1);
+					infos [1] = rs.getString (2);
+					infos [2] = rs.getString (3);
+					infos [3] = rs.getString (4);
+					infos [4] = rs.getString (5);
+					infos [5] = rs.getString (6);
+					infos [6] = rs.getString (7);
+					infos [7] = rs.getString (8);
+					infos [8] = rs.getString (9);
+					infos [9] = rs.getString (10);
+					infos [10] = rs.getString (11);
+					model.addRow (infos);
+
+				    }
+				    querylabel.setText ("select * from stats where [" + titlelabel.getText () + "]" + equallabel.getText () + titleclabel.getText ());
+				    querylabel.updateUI ();
+				}
+
+				System.out.println ("select * from stats where [" + titlelabel.getText () + "]" + equallabel.getText () + titleclabel.getText ());
+
+			    }
+			    catch (ClassNotFoundException e)
+			    {
+				e.printStackTrace ();
+			    }
+			    catch (SQLException e)
+			    {
+				// TODO Auto-generated catch block
+				e.printStackTrace ();
+			    }
+
+			    
+			    andoridentifier.setText ("jim");
+			    mainlist.setSelectedIndex (0);
+			    seclist.setSelectedIndex (0);
+			    seclist1.setSelectedIndex (0);
+			    playerslist.setSelectedIndex (0);
+			    goalslist.setSelectedIndex (0);
+			    arlist.setSelectedIndex (0);
+			    goalslist.setVisible (false);
+			    playerslist.setVisible (true);
+			    
+			    System.out.println(query+firstquery);
+		    }
+
+		}
+		);
+	    }
+	}
+	);
+    }
+}
