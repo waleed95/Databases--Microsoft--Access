@@ -1,4 +1,4 @@
 Databases
 ==============
 
-Programs that that utilize databases
+Programs that execute various queries to MS Access databases
