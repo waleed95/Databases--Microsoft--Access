@@ -21,9 +21,8 @@ public class Comics2 {
 	 */
 	
 		public static void main(String[] args) {
-			// TODO Auto-generated method stub
-			    //Set up the frame
-			    JFrame frame = new JFrame("Comics"); 
+	
+		JFrame frame = new JFrame("Comics"); 
 	        Dimension screenSize = frame.getToolkit().getScreenSize(); 
 	        frame.setLayout(new FlowLayout()); 
 	        
@@ -45,10 +44,9 @@ public class Comics2 {
 	        frame.add(mypanel);
 	        frame.setSize(4500,4500); 
 	        frame.setBounds(screenSize.width/6, screenSize.height/6, 
-	                 screenSize.width/1, screenSize.height/1); 
+	           		screenSize.width/1, screenSize.height/1); 
 
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-
 	        frame.setVisible(true); 
 			
 	        search.addActionListener(new ActionListener() {
@@ -59,11 +57,8 @@ public class Comics2 {
 	        	
 	        		try{           
 	    				Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-	    				//Connection con = DriverManager.getConnection("jdbc:odbc:DRIVER=Lefty");
-	    				Connection con = DriverManager.getConnection("jdbc:odbc:comics2"); 
-	    				
+	    				Connection con = DriverManager.getConnection("jdbc:odbc:comics2");
 	    				Statement st = con.createStatement();
-	    				
 	    				ResultSet rs = st.executeQuery("select * from comics where [title] ORDER by [title] asc");
 	    				
 	    				while (rs.next()) {
@@ -92,10 +87,8 @@ public class Comics2 {
 		        		
 		        		try{           
 		    				Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-		    				Connection con = DriverManager.getConnection("jdbc:odbc:comics2"); 
-		    				
+		    				Connection con = DriverManager.getConnection("jdbc:odbc:comics2");
 		    				Statement st = con.createStatement();
-		    				
 		    				ResultSet rs = st.executeQuery("select * from comics where [producer] ORDER by [producer] desc");
 		    				
 		    				while (rs.next()) {
@@ -127,9 +120,7 @@ public class Comics2 {
 		        		try{           
 		    				Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 		    				Connection con = DriverManager.getConnection("jdbc:odbc:comics2"); 
-		    				
 		    				Statement st = con.createStatement();
-		    				
 		    				ResultSet rs = st.executeQuery("select * from comics where [producer] like 'marvel%'");
 		    				
 		    				while (rs.next()) {
